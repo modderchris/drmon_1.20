@@ -3,7 +3,7 @@
 --
 
 local libURL = "https://raw.githubusercontent.com/acidjazz/drmon/master/lib/f.lua"
-local startupURL = "https://raw.githubusercontent.com/acidjazz/drmon/master/drmon.lua"
+local startupURL = "https://github.com/modderchris/drmon_1.20/edit/master/drmon_1.20.lua"
 local lib, startup
 local libFile, startupFile
 
