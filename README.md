@@ -1,6 +1,8 @@
+fork for 1.20 by modderchris, credit acidjazz for the bulk of the code and any credited on the parent of this fork
+fixes changed internal status names, a bug related to bool->string outputs, slight changes in world setup, and a fix for a glitch on slower screen updates that cause flashing during updates
 
 ![](examples/2.jpg)
-> *status*: currently stable, writing documentation
+> *status*: currently stable
 
 
 # drmon
@@ -8,17 +10,17 @@ monitor and failsafe automation for your draconic reactor
 
 ### what is this
 this is a computercraft LUA script that monitors everything about a draconic reactor, with a couple features to help keep it from exploding
-NB: This is for Minecraft 1.7.10. You will need to edit references within the code for any version higher to reflect any changes made to Draconic Evolution past its 1.7.10 release.
+NB: This is for Minecraft 1.20, no future versions tested, internal status names may change again, unsure if it works on anything older, forked for that same reason
 
 
 ### tutorial
-you can find a very well made youtube tutorial on how to set this up [here](https://www.youtube.com/watch?v=8rBhQP1xqEU) , thank you [The MindCrafters](https://www.youtube.com/channel/UCf2wEy4_BbYpAQcgvN26OaQ)
+no video tutorial for this version
 
 ### features
-* uses a 3x3 advanced computer touchscreen monitor to interact with your reactor
+* uses a 3x5 wide advanced computer touchscreen monitor to interact with your reactor
 * automated regulation of the input gate for the targeted field strength of 50%
   * adjustable
-* immediate shutdown and charge upon your field strength going below 20%
+* immediate shutdown and charge upon your field strength going below 15%
   * adjustable
   * reactor will activate upon a successful charge
 * immediate shutdown when your temperature goes above 8000C
@@ -32,31 +34,35 @@ you can find a very well made youtube tutorial on how to set this up [here](http
 ### requirements
 * one fully setup draconic reactor with fuel
 * 1 advanced computer
-* 9 advanced monitors
-* 3 wired modems, wireless will not work
+* 15 advanced monitors
+* 4 wired modems, wireless will not work
 * a bunch of network cable
 
 ### installation
 * your reactor output flux gate must be setup so that one side of it and one of your stabilizers touches a side of the advanced computer
-* by default, flux gate should touch the right side, stabilizer should touch the back of the computer
+  * by default, flux gate should touch the back side
   * if you want to use different sides you need to modify `startup` after you have installed this and specify the sides
+* connect a modem to one of the stabilizers
 * connect a modem to your input flux gate (the one connected to your reactor energy injector)
 * connect a modem to your advanced computer
-* setup yoru monitors to be a 3x3 and connect a modem to anywhere but the front
-* run network cable to all 3 modems
+* setup your monitors to be a 3x5 and connect a modem to anywhere but the front
+* run network cable to all 4 modems
 * install this code via running the install script using these commands :
 
 ```
-> pastebin get Ls1Wg3QQ install
+> pastebin get placeholder install
 > install
+(WIP on the pastebin, install the original and copy the code for this new drmon_1.20 via your game files or editor if you must)
+
 ```
 * modify `startup` if you wish to configure/alter any variables mentioned in the feature list, you'll find them at the top of the file
 ```
 > startup
 ```
-* you should see stats in your term, and on your monitor
+* you should see stats in your term, and on your monitor(terminal blnks, was not sure how to fix that and less critical as it is intended to be 100% monitor)
 
-### upgrading to the latest version
+
+### upgrading to the latest version(invalid for now)
 * right click your computer
 * hold ctrl+t until you get a `>`
 
@@ -64,6 +70,6 @@ you can find a very well made youtube tutorial on how to set this up [here](http
 > install
 > startup
 ```
-
+(not valid till I set it up myself)
 ### known issues
-* there is a problem with **skyfactory 2.5** and **pastebin**, see workarounds [here](https://github.com/acidjazz/drmon/issues/9#issuecomment-277910288)
+* none known yet for 1.20
