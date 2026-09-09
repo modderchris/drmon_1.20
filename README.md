@@ -62,7 +62,7 @@ no video tutorial for this version
 * you should see stats in your term, and on your monitor(terminal blnks, was not sure how to fix that and less critical as it is intended to be 100% monitor)
 
 
-### upgrading to the latest version(invalid for now)
+### upgrading to the latest version
 * right click your computer
 * hold ctrl+t until you get a `>`
 
@@ -70,6 +70,5 @@ no video tutorial for this version
 > install
 > startup
 ```
-(not valid till I set it up myself)
 ### known issues
 * none known yet for 1.20
