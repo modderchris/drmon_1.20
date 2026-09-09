@@ -1,6 +1,6 @@
 -- modifiable variables
-local reactorSide = "back"
-local fluxgateSide = "right"
+local fluxgateSide = "back"
+local inputFluxgateName = "flow_gate_2"
 
 local targetStrength = 50
 local maxTemperature = 8000
@@ -12,10 +12,10 @@ local activateOnCharged = 1
 -- please leave things untouched from here on
 os.loadAPI("lib/f")
 
-local version = "0.25"
+local version = "0.25.1"
 -- toggleable via the monitor, use our algorithm to achieve our target field strength or let the user tweak it
 local autoInputGate = 1
-local curInputGate = 222000
+local curInputGate = 500000
 
 -- monitor 
 local mon, monitor, monX, monY
@@ -34,9 +34,9 @@ local emergencyCharge = false
 local emergencyTemp = false
 
 monitor = f.periphSearch("monitor")
-inputfluxgate = f.periphSearch("flux_gate")
+inputfluxgate = peripheral.wrap(inputFluxgateName)
 fluxgate = peripheral.wrap(fluxgateSide)
-reactor = peripheral.wrap(reactorSide)
+reactor = f.periphSearch("draconic_reactor")
 
 if monitor == null then
 	error("No valid monitor was found")
@@ -55,8 +55,9 @@ if inputfluxgate == null then
 end
 
 monX, monY = monitor.getSize()
+local DrawBuffer = window.create(monitor, 1, 1, monX, monY, false)
 mon = {}
-mon.monitor,mon.X, mon.Y = monitor, monX, monY
+mon.monitor,mon.X, mon.Y = DrawBuffer, monX, monY
 
 --write settings to config file
 function save_config()
@@ -161,13 +162,16 @@ end
 
 
 
+
 function update()
   while true do 
 
-    f.clear(mon)
-
     ri = reactor.getReactorInfo()
 
+    DrawBuffer.setVisible(false)
+    f.clear(mon)
+	
+	
     -- print out all the infos from .getReactorInfo() to term
 
     if ri == nil then
@@ -175,7 +179,7 @@ function update()
     end
 
     for k, v in pairs (ri) do
-      print(k.. ": ".. v)
+      print(k.. ": ".. tostring(v))
     end
     print("Output Gate: ", fluxgate.getSignalLowFlow())
     print("Input Gate: ", inputfluxgate.getSignalLowFlow())
@@ -185,12 +189,15 @@ function update()
     local statusColor
     statusColor = colors.red
 
-    if ri.status == "online" or ri.status == "charged" then
+    if ri.status == "running" or ri.status == "warming_up" and ri.temperature >= 2000 and ri.temperature <= safeTemperature	then
       statusColor = colors.green
-    elseif ri.status == "offline" then
+    elseif ri.status == "cold" then
       statusColor = colors.gray
-    elseif ri.status == "charging" then
+    elseif ri.status == "cooling" then
+      statusColor = colors.blue
+    elseif ri.status == "warming_up" then
       statusColor = colors.orange
+	 else statusColor = colors.red
     end
 
     f.draw_text_lr(mon, 2, 2, 1, "Reactor Status", string.upper(ri.status), colors.white, statusColor, colors.black)
@@ -257,8 +264,8 @@ function update()
     end
     
     -- are we charging? open the floodgates
-    if ri.status == "charging" then
-      inputfluxgate.setSignalLowFlow(900000)
+    if ri.status == "warming_up" then
+      inputfluxgate.setSignalLowFlow(10000000)
       emergencyCharge = false
     end
 
@@ -269,13 +276,13 @@ function update()
     end
 
     -- are we charged? lets activate
-    if ri.status == "charged" and activateOnCharged == 1 then
+    if ri.status == "warming_up" and activateOnCharged == 1 and ri.temperature >=2000 then
       reactor.activateReactor()
     end
 
     -- are we on? regulate the input fludgate to our target field strength
     -- or set it to our saved setting since we are on manual
-    if ri.status == "online" then
+    if ri.status == "running" then
       if autoInputGate == 1 then 
         fluxval = ri.fieldDrainRate / (1 - (targetStrength/100) )
         print("Target Gate: ".. fluxval)
@@ -295,7 +302,7 @@ function update()
     end
 
     -- field strength is too dangerous, kill and it try and charge it before it blows
-    if fieldPercent <= lowestFieldPercent and ri.status == "online" then
+    if fieldPercent <= lowestFieldPercent and ri.status == "running" then
       action = "Field Str < " ..lowestFieldPercent.."%"
       reactor.stopReactor()
       reactor.chargeReactor()
@@ -308,7 +315,8 @@ function update()
       action = "Temp > " .. maxTemperature
       emergencyTemp = true
     end
-
+	
+    DrawBuffer.setVisible(true)
     sleep(0.1)
   end
 end
