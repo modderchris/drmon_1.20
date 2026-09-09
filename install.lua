@@ -1,4 +1,4 @@
--- drmon installation script
+-- drmon_1.20 installation script
 --
 --
 
