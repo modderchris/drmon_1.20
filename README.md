@@ -50,7 +50,7 @@ no video tutorial for this version
 * install this code via running the install script using these commands :
 
 ```
-> pastebin get placeholder install
+> pastebin get DVuqyVdF install
 > install
 (WIP on the pastebin, install the original and copy the code for this new drmon_1.20 via your game files or editor if you must)
 
