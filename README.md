@@ -52,7 +52,6 @@ no video tutorial for this version
 ```
 > pastebin get DVuqyVdF install
 > install
-(WIP on the pastebin, install the original and copy the code for this new drmon_1.20 via your game files or editor if you must)
 
 ```
 * modify `startup` if you wish to configure/alter any variables mentioned in the feature list, you'll find them at the top of the file
